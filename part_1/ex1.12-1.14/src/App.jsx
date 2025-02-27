@@ -13,7 +13,7 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [votes, setVoted] =useState([0,0,0,0,0,0,0,0])
+  const [votes, setVoted] =useState( new Uint8Array(10))
 
   return (
     <div>
