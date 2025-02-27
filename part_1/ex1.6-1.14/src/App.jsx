@@ -7,6 +7,9 @@ const Statistic = (props) => {
   )
 }
 const Statistics = (props) => {
+  if(props.availible){
+    return (<p>No feedback given</p>)
+  }
   return (
     <div>
       {props.types.map((type_name,index) => (
@@ -64,7 +67,7 @@ const App = () => {
       <button onClick = {handleClick("Good")}>Good</button>
       <button onClick = {handleClick("Neutral")}>Neutral</button>
       <button onClick = {handleClick("Bad")} >Bad</button>
-      <Statistics types = {type_names} values = {types}/>
+      <Statistics availible={good+bad+neutral ==0} types = {type_names} values = {types}/>
 
     </div>
   )
