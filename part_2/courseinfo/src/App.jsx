@@ -30,8 +30,9 @@ const Course = (props) => {
 }
 
 const Total = (props) => {
-  let total = 0;
-  return (<p>Total of {props.course.parts.map(part => total += part.exercises)[props.course.parts.length - 1]} exercices</p>)
+  const parts = props.course.parts
+  const total = parts.reduce((somme,parts)=> {return somme+parts.exercises},0)
+  return (<p>Total of {total} exercices</p>)
 
 }
 
