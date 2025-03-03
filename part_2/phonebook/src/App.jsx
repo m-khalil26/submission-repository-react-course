@@ -7,14 +7,13 @@ const App = () => {
   const [newName, setNewName] = useState('')
 
   const handleSubmit = (event) => {
-    setPersons(persons.concat({ name: newName }))
+    (persons.find(person => person.name===newName))===undefined ? setPersons(persons.concat({ name: newName })) : alert(`${newName} is already taken.`)
     setNewName('')
     event.preventDefault()
   }
 
   const handleChange = (event) => {
     setNewName(event.target.value)
-    console.log(event.target.value)
 
   }
   return (
@@ -29,8 +28,8 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <div>  {persons.map((person) => <p key={person.name}>{person.name}</p>)}</div>
-      
+      <div>  {persons.map((person) => <p key={person.name.concat(Math.random(2*5))}>{person.name}</p>)}</div>
+
     </div>
   )
 }
