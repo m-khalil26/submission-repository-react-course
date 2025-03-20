@@ -1,5 +1,37 @@
-import { event } from '@subsquid/evm-abi'
 import { useState } from 'react'
+
+const Filter = props => {
+  return (
+      <form >
+        <div>
+          search: <input value={props.value} onChange={props.handle} />
+        </div>
+      </form>
+  )
+}
+
+const PersonForm = props => {
+  return (
+    <form onSubmit={props.handleSubmit}>
+        <div>
+          name: <input value={props.newName} onChange={props.handleChange} />
+        </div>
+        <div>
+        phone number: <input value={props.newPhoneNumber} onChange={props.handlePhoneNumberChange} />
+        </div>
+        <div>
+          <button type="submit" >add</button>
+        </div>
+      </form>
+  )
+}
+
+const Persons = props =>{
+ return( 
+ <div>{props.persons.map((person) => <p key={person.id}>{person.name}  {person.phonenumber}</p>)}</div>
+)
+
+}
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -11,14 +43,14 @@ const App = () => {
 
   const[filteredPersons, setFiltered] = useState(persons)
   const [newName, setNewName] = useState('')
-  const[newPhonenumber,setNewPhonenumber] = useState('')
+  const[newPhoneNumber,setNewPhoneNumber] = useState('')
   const[searchValue, setSearchValue] = useState('')
 
   const handleSubmit = (event) => {
-    (persons.find(person => person.name===newName))===undefined ? setPersons(persons.concat({ name: newName ,phonenumber : newPhonenumber})) : alert(`${newName} is already taken.`)
-    setFiltered(persons.concat({ name: newName ,phonenumber : newPhonenumber}))
+    (persons.find(person => person.name===newName))===undefined ? setPersons(persons.concat({ name: newName ,phonenumber : newPhoneNumber})) : alert(`${newName} is already taken.`)
+    setFiltered(persons.concat({ name: newName ,phonenumber : newPhoneNumber}))
     setNewName('')
-    setNewPhonenumber('')
+    setNewPhoneNumber('')
     event.preventDefault()
   }
 
@@ -30,34 +62,25 @@ const App = () => {
     setNewName(event.target.value)
   }
 
-  const handlePhonenumberChange = (event) => {
-    setNewPhonenumber(event.target.value)
+  const handlePhoneNumberChange = (event) => {
+    setNewPhoneNumber(event.target.value)
   }
   return (
     <div>
       <h1>Phonebook</h1>
       <h2>Search</h2>
-      <form >
-        <div>
-          search: <input value={searchValue} onChange={handleSearch} />
-        </div>
-      </form>
+      <Filter value={searchValue} handle={handleSearch} />
 
       <h2>Add new</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          name: <input value={newName} onChange={handleChange} />
-        </div>
-        <div>
-        phonenumber: <input value={newPhonenumber} onChange={handlePhonenumberChange} />
-        </div>
-        <div>
-          <button type="submit" >add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <div>{filteredPersons.map((person) => <p key={person.id}>{person.name}  {person.phonenumber}</p>)}</div>
+      <PersonForm 
+        newName={newName}
+        handleChange={handleChange}
+        newPhoneNumber={newPhoneNumber}
+        handlePhoneNumberChange={handlePhoneNumberChange}
+        handleSubmit={handleSubmit}/>
 
+      <h2>Numbers</h2>
+      <Persons persons={filteredPersons}/>
     </div>
   )
 }
