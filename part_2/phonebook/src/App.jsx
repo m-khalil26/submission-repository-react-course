@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const Filter = props => {
   return (
@@ -28,31 +29,38 @@ const PersonForm = props => {
 
 const Persons = props =>{
  return( 
- <div>{props.persons.map((person) => <p key={person.id}>{person.name}  {person.phonenumber}</p>)}</div>
+ <div>{props.persons.map((person) => <p key={person.id}>{person.name}  {person.number}</p>)}</div>
 )
 
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', phonenumber: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', phonenumber: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', phonenumber: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', phonenumber: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
 
   const[filteredPersons, setFiltered] = useState(persons)
   const [newName, setNewName] = useState('')
   const[newPhoneNumber,setNewPhoneNumber] = useState('')
   const[searchValue, setSearchValue] = useState('')
 
+  const hook = ()  =>{
+    axios.get('http://localhost:3001/persons').then((response) => {
+      console.log('data ',response.data)
+      setPersons(response.data)
+      setFiltered(response.data)
+      
+    } )
+  }
+  useEffect(hook,[])
+  
   const handleSubmit = (event) => {
-    (persons.find(person => person.name===newName))===undefined ? setPersons(persons.concat({ name: newName ,phonenumber : newPhoneNumber})) : alert(`${newName} is already taken.`)
-    setFiltered(persons.concat({ name: newName ,phonenumber : newPhoneNumber}))
+    (persons.find(person => person.name===newName))===undefined ? setPersons(persons.concat({ name: newName ,number : newPhoneNumber})) : alert(`${newName} is already taken.`)
+    setFiltered(persons.concat({ id:persons.length+1,name: newName ,number : newPhoneNumber}))
     setNewName('')
     setNewPhoneNumber('')
     event.preventDefault()
   }
+
+
 
   const handleSearch =(event) =>{
     setSearchValue(event.target.value)
